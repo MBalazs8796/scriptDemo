@@ -1,5 +1,4 @@
 import unittest
-import robot
 import zh_tools
 
 def collector(misses):
@@ -20,8 +19,18 @@ def speak(name, value, success, reason=''):
         print(f'ok: {reason}')
 
 def main():
+    try:
+        import robot
+    except ModuleNotFoundError as e:
+        print('A beadott megoldás helytelen formátumú a beadott fájl neve feladat.py kell legyen!')
+        return
+    except Exception as e:
+        print(f'A megoldás értelmezés során az alábbi hibába ütközik: {e}')
+        return
+    
     loader = unittest.TestLoader()
     result = unittest.TestResult()
+
 
     FULL = '█'
     EMPTY = '░'
