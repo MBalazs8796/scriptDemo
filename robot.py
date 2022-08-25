@@ -12,13 +12,19 @@ class TestOsszead(unittest.TestCase):
     @unittest.skipUnless(checkMethodExists('osszead', 3), 'hianyzo metodus')
     @pont(2)
     def test_egyszeru_osszeadas(self):
-        self.assertEqual(feladat.osszead(1, 2, 3), 7, "nem jo")
+        self.assertEqual(feladat.osszead(1, 2, 3), 6, "nem jo")
         self.assertFalse(feladat.osszead(1,1,1) == 3, 'nemtom')
 
     @unittest.skipUnless(checkMethodExists('osszead', 3), 'hianyzo metodus')
-    @pont(100)
+    @pont(1)
     def test_egyszeru_osszeadas2(self):
         self.assertEqual(feladat.osszead(1, 1, -1), 1, "most se jo")
+        
+    @unittest.skipUnless(checkMethodExists('osszead', 3), 'hianyzo metodus')
+    @pont(1)
+    def test_egyszeru_osszeadas3(self):
+        raise(ValueError('nagy hiba'))
+        pass
 
 class TestErtelmesCucc(unittest.TestCase):
 
@@ -29,10 +35,10 @@ class TestErtelmesCucc(unittest.TestCase):
     def setUpClass(self):
         try:
             self.target = feladat.ertelmesCucc()
-        except AttributeError:
-            raise unittest.SkipTest("Hianyzik az osztaly")
-        except TypeError:
-            raise unittest.SkipTest("Hibas konstruktor")
+        except AttributeError as exc:
+            raise unittest.SkipTest("Hianyzik az osztaly") from exc
+        except TypeError as exc:
+            raise unittest.SkipTest("Hibas konstruktor") from exc
 
     @unittest.skipUnless(checkMethodExists('csinal', 1), 'hianyzo metodus')
     @pont(3)

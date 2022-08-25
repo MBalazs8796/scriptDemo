@@ -16,10 +16,8 @@ def pont(p = 1, shouldDump = False):
     def passer(func):
         if not shouldDump:
             if not hasattr(pont, 'func_values'):
-                setattr(pont, 'func_values', list())
-            pont.func_values.append(
-                (func.__name__, p)
-            )
+                setattr(pont, 'func_values', dict())
+            pont.func_values[func.__name__] = p
             return func
         else:
             return pont.func_values

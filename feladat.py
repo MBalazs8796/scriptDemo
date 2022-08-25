@@ -6,7 +6,7 @@ def asd(s):
     return 2
 
 
-class ertelmesCuccc(object):
+class ertelmesCucc(object):
     def __init__(self):
         self.valami = 2
 
