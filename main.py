@@ -24,7 +24,6 @@ def main():
     allowed_modules = ['__main__']
     unneded_msg = 'A feladat megoldásához az {0} használata nem szükséges!'
     builtins.input = lambda *arg, **kwargs: zh_tools.failTest(unneded_msg.format('input'))
-    builtins.eval = lambda *arg, **kwargs: zh_tools.failTest(unneded_msg.format('eval'))
     try:
         import robot
     except ModuleNotFoundError as e:
@@ -50,6 +49,8 @@ def main():
             if isinstance(node, ast.Expr):
                 if node.value.func.id == 'exec':
                     print(unneded_msg.format('exec'))
+                elif node.value.func.id == 'eval':
+                    print(unneded_msg.format('eval'))
                     return
             
     loader = unittest.TestLoader()
