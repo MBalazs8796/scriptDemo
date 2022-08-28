@@ -17,5 +17,5 @@ class ertelmesCucc(object):
         return self.valami == o.valami
 
     def paramos(self, szam):
-        return self.valami ** szam
+        return self.valami ** szam 
     

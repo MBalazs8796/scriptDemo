@@ -4,7 +4,7 @@ import feladat
 from zh_tools import *
 
 
-class TestOsszead(unittest.TestCase):
+class TestOsszead(BaseTest):
 
     def setUp(self) -> None:
         super().setUp()
@@ -13,7 +13,7 @@ class TestOsszead(unittest.TestCase):
     @pont(2)
     def test_egyszeru_osszeadas(self):
         self.assertEqual(feladat.osszead(1, 2, 3), 6, "nem jo")
-        self.assertFalse(feladat.osszead(1,1,1) == 3, 'nemtom')
+        self.assertFalse(feladat.osszead(1,1,1) == 4, 'nemtom')
 
     @unittest.skipUnless(checkMethodExists('osszead', 3), 'hianyzo metodus')
     @pont(1)
@@ -26,7 +26,7 @@ class TestOsszead(unittest.TestCase):
         raise(ValueError('nagy hiba'))
         pass
 
-class TestErtelmesCucc(unittest.TestCase):
+class TestErtelmesCucc(BaseTest):
 
     def setUp(self) -> None:
         return super().setUp()
@@ -39,6 +39,7 @@ class TestErtelmesCucc(unittest.TestCase):
             raise unittest.SkipTest("Hianyzik az osztaly") from exc
         except TypeError as exc:
             raise unittest.SkipTest("Hibas konstruktor") from exc
+        super().setUpClass()
 
     @unittest.skipUnless(checkMethodExists('csinal', 1), 'hianyzo metodus')
     @pont(3)
@@ -50,3 +51,4 @@ class TestErtelmesCucc(unittest.TestCase):
     def test_egyenlo(self):
         masik = feladat.ertelmesCucc()
         self.assertTrue(self.target == masik) 
+    
