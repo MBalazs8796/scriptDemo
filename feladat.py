@@ -1,4 +1,3 @@
-
 def osszead(a,b,c):
     return a+b+c
 

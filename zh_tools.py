@@ -2,7 +2,7 @@ import ast
 import multiprocessing
 import unittest
 
-def checkMethodExists(name, param_num):
+def checkMethodExists(name: str, param_num: int):
     if not hasattr(checkMethodExists, 'ast'):
         with open("feladat.py", "r", encoding="utf-8") as fp:
                 setattr(checkMethodExists, 'ast', ast.parse(fp.read()))
@@ -49,4 +49,6 @@ class BaseTest(unittest.TestCase):
         self.TIMER = 2
         self.prevRes = None
         self.tests = [x for x in dir(self) if x.startswith('test_')]
-        
+
+def failTest(txt: str):
+    raise unittest.SkipTest(txt)

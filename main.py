@@ -1,5 +1,7 @@
 import unittest
 import zh_tools
+import builtins
+import ast
 
 def collector(misses):
     info = dict()
@@ -19,6 +21,9 @@ def speak(name, value, success, reason=''):
         print(f'ok: {reason}')
 
 def main():
+    builtins.input = lambda *arg, **kwargs: zh_tools.failTest('A feladat megoldasahoz az input hasznalata nem szukseges!')
+    builtins.eval = lambda *arg, **kwargs: zh_tools.failTest('A feladat megoldasahoz az eval hasznalata nem szukseges!')
+    ALLOWED_MODULES = ['__main__']
     try:
         import robot
     except ModuleNotFoundError as e:
@@ -27,6 +32,27 @@ def main():
     except BaseException as e:
         print(f'A megoldás értelmezés során az alábbi hibába ütközik: {e}')
         return
+        
+    with open("feladat.py", "r", encoding="utf-8") as fp:
+        for node in ast.walk(ast.parse(fp.read())):
+            if isinstance(node, ast.Import):
+                for name in node.names:
+                    if name.name not in ALLOWED_MODULES:
+                        print(f'Tiltott modult használsz! ({name.name})')
+                        return
+            
+            if isinstance(node, ast.ImportFrom):
+                if node.module not in ALLOWED_MODULES:
+                    print(f'Tiltott modult használsz! ({node.module})')
+                    return
+            
+            if isinstance(node, ast.Expr):
+                if node.value.func.id == 'exec':
+                    print('A feladat megoldasahoz az exec hasznalata nem szukseges!')
+                    return
+            
+
+
     
     loader = unittest.TestLoader()
     result = unittest.TestResult()

@@ -6,9 +6,6 @@ from zh_tools import *
 
 class TestOsszead(BaseTest):
 
-    def setUp(self) -> None:
-        super().setUp()
-
     @unittest.skipUnless(checkMethodExists('osszead', 3), 'hianyzo metodus')
     @pont(2)
     def test_egyszeru_osszeadas(self):
@@ -23,22 +20,19 @@ class TestOsszead(BaseTest):
     @unittest.skipUnless(checkMethodExists('osszead', 3), 'hianyzo metodus')
     @pont(1)
     def test_egyszeru_osszeadas3(self):
-        raise(ValueError('nagy hiba'))
+        #raise(ValueError('nagy hiba'))
         pass
 
 class TestErtelmesCucc(BaseTest):
-
-    def setUp(self) -> None:
-        return super().setUp()
 
     @classmethod
     def setUpClass(self):
         try:
             self.target = feladat.ertelmesCucc()
-        except AttributeError as exc:
-            raise unittest.SkipTest("Hianyzik az osztaly") from exc
-        except TypeError as exc:
-            raise unittest.SkipTest("Hibas konstruktor") from exc
+        except AttributeError:
+            failTest("Hianyzik az osztaly")
+        except TypeError:
+            failTest("Hibas konstruktor")
         super().setUpClass()
 
     @unittest.skipUnless(checkMethodExists('csinal', 1), 'hianyzo metodus')
