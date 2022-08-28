@@ -24,7 +24,7 @@ def main():
     except ModuleNotFoundError as e:
         print('A beadott megoldás helytelen formátumú a beadott fájl neve feladat.py kell legyen!')
         return
-    except Exception as e:
+    except BaseException as e:
         print(f'A megoldás értelmezés során az alábbi hibába ütközik: {e}')
         return
     
