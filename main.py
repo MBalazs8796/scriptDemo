@@ -15,45 +15,43 @@ def collector(misses):
 def speak(name, value, success, reason=''):
     processed_name = ' '.join(name.split('_')[1:])
     if success:
-        print(f'{processed_name} {value}/{value}: pont ✓')
+        print(f'    ✓ {processed_name}: {value}/{value} pont ')
     else:
-        print(f'{processed_name} {0}/{value}: pont ✗')
-        print(f'ok: {reason}')
+        print(f'    ✗ {processed_name}: {0}/{value} pont ')
+        print(f'        ⚠ {reason}')
 
 def main():
-    builtins.input = lambda *arg, **kwargs: zh_tools.failTest('A feladat megoldasahoz az input hasznalata nem szukseges!')
-    builtins.eval = lambda *arg, **kwargs: zh_tools.failTest('A feladat megoldasahoz az eval hasznalata nem szukseges!')
-    ALLOWED_MODULES = ['__main__']
+    allowed_modules = ['__main__']
+    unneded_msg = 'A feladat megoldásához az {0} használata nem szükséges!'
+    builtins.input = lambda *arg, **kwargs: zh_tools.failTest(unneded_msg.format('input'))
+    builtins.eval = lambda *arg, **kwargs: zh_tools.failTest(unneded_msg.format('eval'))
     try:
         import robot
     except ModuleNotFoundError as e:
         print('A beadott megoldás helytelen formátumú a beadott fájl neve feladat.py kell legyen!')
         return
     except BaseException as e:
-        print(f'A megoldás értelmezés során az alábbi hibába ütközik: {e}')
+        print(f'A megoldás értelmezése során a következő hiba merül fel: {e}')
         return
         
     with open("feladat.py", "r", encoding="utf-8") as fp:
         for node in ast.walk(ast.parse(fp.read())):
             if isinstance(node, ast.Import):
                 for name in node.names:
-                    if name.name not in ALLOWED_MODULES:
+                    if name.name not in allowed_modules:
                         print(f'Tiltott modult használsz! ({name.name})')
                         return
             
             if isinstance(node, ast.ImportFrom):
-                if node.module not in ALLOWED_MODULES:
+                if node.module not in allowed_modules:
                     print(f'Tiltott modult használsz! ({node.module})')
                     return
             
             if isinstance(node, ast.Expr):
                 if node.value.func.id == 'exec':
-                    print('A feladat megoldasahoz az exec hasznalata nem szukseges!')
+                    print(unneded_msg.format('exec'))
                     return
             
-
-
-    
     loader = unittest.TestLoader()
     result = unittest.TestResult()
 
@@ -94,6 +92,7 @@ def main():
     
     for suite_name, tests in every_test.items():
         printed_name = suite_name.split('Test')[-1][:-1]
+        print()
         print(f'A(z) {printed_name} tesztjeinek eredménye az alábbi:\n')
         for func_name in tests:
             value = point_matrix[func_name]
