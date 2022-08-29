@@ -109,7 +109,6 @@ def main():
     print(FULL*(point_sum-point_lost) + EMPTY*(point_lost))
     
 
-
 if __name__ == '__main__':
     main()
     

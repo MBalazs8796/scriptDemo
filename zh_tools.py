@@ -1,6 +1,7 @@
 import ast
 import multiprocessing
 import unittest
+import platform
 
 def checkMethodExists(name: str, param_num: int):
     if not hasattr(checkMethodExists, 'ast'):
@@ -32,15 +33,17 @@ class BaseTest(unittest.TestCase):
         if self.prevRes is None:
             self.prevRes = self.defaultTestResult()
         current_name = self.tests.pop(0)
-        p = multiprocessing.Process(target=super().run, args=(self.prevRes, ))
-        p.start()
-        p.join(self.TIMER)
-        if p.is_alive():
-            p.terminate()
-            p.join()
-            self.prevRes.failures.append((current_name, 'Végtelen ciklus\n'))
-            self.prevRes.testsRun += 1
-            return self.prevRes
+        
+        if platform.system() != 'Windows':
+            p = multiprocessing.Process(target=super().run, args=(self.prevRes, ))
+            p.start()
+            p.join(self.TIMER)
+            if p.is_alive():
+                p.terminate()
+                p.join()
+                self.prevRes.failures.append((current_name, 'Végtelen ciklus\n'))
+                self.prevRes.testsRun += 1
+                return self.prevRes
         self.prevRes = super().run(self.prevRes)
         return self.prevRes
     
