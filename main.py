@@ -47,11 +47,12 @@ def main():
                     return
             
             if isinstance(node, ast.Expr):
-                if node.value.func.id == 'exec':
-                    print(unneded_msg.format('exec'))
-                elif node.value.func.id == 'eval':
-                    print(unneded_msg.format('eval'))
-                    return
+                if not isinstance(node.value.func, ast.Attribute):
+                    if node.value.func.id == 'exec':
+                        print(unneded_msg.format('exec'))
+                    elif node.value.func.id == 'eval':
+                        print(unneded_msg.format('eval'))
+                        return
             
     loader = unittest.TestLoader()
     result = unittest.TestResult()
